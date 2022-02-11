@@ -2,37 +2,34 @@ import os
 import yaml
 import argparse
 
-
 #use yaml to sort our folders
 #implement arc parse
 
-var1_yaml = """
-- 'a'
-' 'b'
-- 'c'
-- 'd'
+yaml_string = """
+- [{'a':'e'},{'b':'f'}]
+- [{'m':'r'},{'n':'s'}]
 """
 
-var = yaml.safe_load(var1_yaml)
+#stream = open('data.yaml','r')
+#yamldata = yaml.safe_load(stream)
+#stream.close()
+yamldata = yaml.safe_load(yaml_string)
+
+#print(yamldata)
 
 var_1 = ['a','b','c','d']
-
-var1_yam2 = """
-- 'm'
-' 'n'
-- 'o'
-"""
-
 var_2 = ['m','n','o']
 
-root = '/Magers'
+root = 'Magers'
 
+dict = {'a':'e'}
+print(dict.items())
+#print(yamldata[0][0].keys()[0])
 
 try:
-
-    for folders in var_1:
-        for nestedfolder in var_2:
-            pwd =(os.path.join(root,folders,nestedfolder))
+    for level1 in yamldata:
+        for level2 in yamldata[level1]:
+            pwd =(os.path.join(root,level1,level2.keys()))
             os.makedirs(pwd)
             file_name = "test.txt"
             file1 = open(pwd+"/input.dat", "w")
