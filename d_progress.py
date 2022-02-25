@@ -23,6 +23,8 @@ var_2 = ['m','n','o']
 root = 'Magers'
 
 dict = {'a':'e'}
+
+#last check, for a given dict key, give us the value associated
 print(dict.items())
 #print(yamldata[0][0].keys()[0])
 
