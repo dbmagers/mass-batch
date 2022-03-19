@@ -3,12 +3,8 @@ import yaml
 import argparse
 from mako.template import Template
 
-
-
 # 1. understand mako libray, find examples
 # put txt files with same format but different values in the bottom folder of Magers
-
-
 
 #use yaml to sort our folders
 #implement arc parse
@@ -29,24 +25,26 @@ var_1 = ['a','b','c','d']
 var_2 = ['m','n','o']
 
 root = 'Magers'
+yamldata.reverse()
 
-dict = {'a':'e'}
-
-
-
-#last check, for a given dict key, give us the value associated
-print(dict.items())
-#print(yamldata[0][0].keys()[0])
-
-try:
-    for level1 in yamldata:
-        for level2 in yamldata[level1]:
-            pwd =(os.path.join(root,level1,level2.keys()))
-            os.makedirs(pwd)
-            mytemplate = Template(filenmae = 'templates/test.txt')
+def recurse(yamldata, num_level, pwd):
+    if num_level >= 1:
+        temp = num_level
+        for i in yamldata[num_level-1]: # i is a dict
+            if temp != num_level:
+                pwd = pwd[:-2]
+            pwd += "/"+list(i.keys())[0]
+            temp -= 1
+            recurse(yamldata, num_level - 1, pwd)
+    else:
+        print(pwd)
+        if not os.path.exists(pwd): os.makedirs(pwd)
+        if not os.path.exists(pwd+"/input.dat"):
+            mytemplate = Template(filename = 'templates/test.txt')
             file1 = open(pwd+"/input.dat", "w")
             file1.write("Chemistry and star stuffs?")
             file1.close()
-    
-except FileExistsError:
-    print("file already exists")
+        else: print("input.dat already exists at "+pwd+"/input.dat")
+
+recurse(yamldata, len(yamldata), root)
+ 
