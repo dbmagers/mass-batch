@@ -40,7 +40,18 @@ def recurse(yamldata, num_level, pwd):
         print(pwd)
         if not os.path.exists(pwd): os.makedirs(pwd)
         if not os.path.exists(pwd+"/input.dat"):
-            mytemplate = Template(filename = 'research/test.tmpl')
+            mytemplate = Template(filename = 'test.tmpl')
+            folders = pwd.split("/")
+            count = -1
+            for j in yamldata:
+                print(j, " <- j")
+                print(count, " <- count")
+                print(folders[count], " <- folders[count]") 
+                blah = next((item for item in j if list(item.keys())[0] == folders[count]), None)
+                print(blah) # blah is the dict we need
+                count -= 1
+#                print(yamldata[j][item]['key'])
+
             file1 = open(pwd+"/input.dat", "w")
             file1.write("Chemistry and star stuffs?")
             file1.close()
