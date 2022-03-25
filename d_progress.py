@@ -40,11 +40,10 @@ def recurse(yamldata, num_level, pwd):
         print(pwd)
         if not os.path.exists(pwd): os.makedirs(pwd)
         if not os.path.exists(pwd+"/input.dat"):
-            mytemplate = Template(filename = 'templates/test.txt')
+            mytemplate = Template(filename = 'research/test.tmpl')
             file1 = open(pwd+"/input.dat", "w")
             file1.write("Chemistry and star stuffs?")
             file1.close()
         else: print("input.dat already exists at "+pwd+"/input.dat")
 
 recurse(yamldata, len(yamldata), root)
- 
