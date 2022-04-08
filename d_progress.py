@@ -40,21 +40,26 @@ def recurse(yamldata, num_level, pwd):
         print(pwd)
         if not os.path.exists(pwd): os.makedirs(pwd)
         if not os.path.exists(pwd+"/input.dat"):
-            mytemplate = Template(filename = 'test.tmpl')
+           # mytemplate = Template(filename = 'research/test.tmpl')
             folders = pwd.split("/")
-            count = -1
-            for j in yamldata:
-                print(j, " <- j")
-                print(count, " <- count")
-                print(folders[count], " <- folders[count]") 
-                blah = next((item for item in j if list(item.keys())[0] == folders[count]), None)
-                print(blah) # blah is the dict we need
-                count -= 1
-#                print(yamldata[j][item]['key'])
-
+            print(folders)
+            # for j in yamldata:
+            # use of enumerated for loops to try and index and get the key
+                
             file1 = open(pwd+"/input.dat", "w")
             file1.write("Chemistry and star stuffs?")
             file1.close()
         else: print("input.dat already exists at "+pwd+"/input.dat")
 
 recurse(yamldata, len(yamldata), root)
+
+
+
+#Make Dr Magers write more code and talk smart
+#"https://s3-us-west-1.amazonaws.com/sfdc-demo/people/caroline_kingsley.jpg
+# "https://s3-us-west-1.amazonaws.com/sfdc-demo/people/caroline_kingsley.jpg
+# "https://s3-us-west-1.amazonaws.com/sfdc-demo/people/caroline_kingsley.jpg
+# "https://s3-us-west-1.amazonaws.com/sfdc-demo/people/caroline_kingsley.jpg
+# "https://s3-us-west-1.amazonaws.com/sfdc-demo/people/caroline_kingsley.jpg
+# "https://s3-us-west-1.amazonaws.com/sfdc-demo/people/caroline_kingsley.jpg
+# "https://s3-us-west-1.amazonaws.com/sfdc-demo/people/caroline_kingsley.jpg
