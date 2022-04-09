@@ -7,11 +7,11 @@ from mako.template import Template
 # put txt files with same format but different values in the bottom folder of Magers
 
 #use yaml to sort our folders
-#implement arc parse
+#implement arg parse
 
 yaml_string = """
-- [{'a':'e','b':'f'}]
-- [{'m':'r','n':'s'}]
+- {'a':'e','b':'f'}
+- {'m':'r','n':'s'}
 """
 
 #stream = open('data.yaml','r')
@@ -21,18 +21,17 @@ yamldata = yaml.safe_load(yaml_string)
 #print(yamldata)
 
 root = 'Magers'
-yamldata.reverse()
+yamldata_rev = list(reversed(yamldata))
 
-def recurse(yamldata, num_level, pwd):
+def recurse(yamldata_rev, num_level, pwd):
     if num_level >= 1:
         temp = num_level
-        for i in yamldata[num_level-1][0]: # i is a dict
+        for i in yamldata_rev[num_level-1]: # i is a dict
             if temp != num_level:
                 pwd = pwd[:-2]
-            #pwd += "/"+list(i.keys())[0]
             pwd += "/"+i
             temp -= 1
-            recurse(yamldata, num_level - 1, pwd)
+            recurse(yamldata_rev, num_level - 1, pwd)
     else:
         print(pwd)
         # check if folder already exists, then make it
@@ -40,20 +39,21 @@ def recurse(yamldata, num_level, pwd):
         # check if input.dat already exists, else make it
         if not os.path.exists(pwd+"/input.dat"):
             mytemplate = Template(filename = 'input.tmpl')
-            folders = pwd.split("/")
-            print(folders)
-            # use of enumerated for loops to try and index and get the key
+            # get names of parent folders in pwd and remove root folder name from array
+            directories = pwd.split("/")[1:]
 
-#            for j in folders[1:]:
-#                return None 
+            # build dict of var#:values to render with mako into template file
+            num_directories = len(directories)
+            replace_dict = {}
+            for j in range(0,num_directories):
+                replace_dict['var'+str(j+1)] = yamldata[j][directories[j]]
+            file_contents = mytemplate.render(**replace_dict)
 
-# how do we index over the variable number of mako variables ${blah}?
-            stuff = mytemplate.render(var1='blah')
-               
+            # make file in bottom directory               
             file1 = open(pwd+"/input.dat", "w")
-            file1.write(stuff)
+            file1.write(file_contents)
             file1.close()
         else: print("input.dat already exists at "+pwd+"/input.dat")
 
-recurse(yamldata, len(yamldata), root)
+recurse(yamldata_rev, len(yamldata_rev), root)
 
