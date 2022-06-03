@@ -2,58 +2,71 @@ import os
 import yaml
 import argparse
 from mako.template import Template
+from . import parse
 
 # 1. understand mako libray, find examples
 # put txt files with same format but different values in the bottom folder of Magers
 
 #use yaml to sort our folders
-#implement arg parse
+#implement arc parse
 
 yaml_string = """
-- {'a':'e','b':'f'}
-- {'m':'r','n':'s'}
+- [{'a':'e'},{'b':'f'}]
+- [{'m':'r'},{'n':'s'}]
 """
 
 #stream = open('data.yaml','r')
 #yamldata = yaml.safe_load(stream)
 #stream.close()
 yamldata = yaml.safe_load(yaml_string)
+
+
+
 #print(yamldata)
 
-root = 'Magers'
-yamldata_rev = list(reversed(yamldata))
+var_1 = ['a','b','c','d']
+var_2 = ['m','n','o']
 
-def recurse(yamldata_rev, num_level, pwd):
+root = 'Magers'
+yamldata.reverse()
+
+#new part added 6/1/2022 for argparser
+
+parser = argparse.ArgumentParser(description= "Show yaml file locations")
+
+subparsers = parser.add_argument('-y', '--yaml', help = " location of yaml file that stores all directories to be created",
+                                action=" ")
+
+
+#end of argparse part, don't know what the action should be but i assume all other
+#argparse command line functions will follow the format above this comment
+def recurse(yamldata, num_level, pwd):
     if num_level >= 1:
         temp = num_level
-        for i in yamldata_rev[num_level-1]: # i is a dict
+        for i in yamldata[num_level-1]: # i is a dict
             if temp != num_level:
                 pwd = pwd[:-2]
-            pwd += "/"+i
+            pwd += "/"+list(i.keys())[0]
             temp -= 1
-            recurse(yamldata_rev, num_level - 1, pwd)
+            recurse(yamldata, num_level - 1, pwd)
     else:
         print(pwd)
-        # check if folder already exists, then make it
         if not os.path.exists(pwd): os.makedirs(pwd)
-        # check if input.dat already exists, else make it
         if not os.path.exists(pwd+"/input.dat"):
-            mytemplate = Template(filename = 'input.tmpl')
-            # get names of parent folders in pwd and remove root folder name from array
-            directories = pwd.split("/")[1:]
+            mytemplate = Template(filename = 'test.tmpl')
 
-            # build dict of var#:values to render with mako into template file
-            num_directories = len(directories)
-            replace_dict = {}
-            for j in range(0,num_directories):
-                replace_dict['var'+str(j+1)] = yamldata[j][directories[j]]
-            file_contents = mytemplate.render(**replace_dict)
-
-            # make file in bottom directory               
+            folders = pwd.split("/")
+            print(folders)
+            stuff = mytemplate.render(var1 = "We can do anything")
+            # for j in yamldata:
+            # use of enumerated for loops to try and index and get the key
+                
             file1 = open(pwd+"/input.dat", "w")
-            file1.write(file_contents)
+            file1.write(stuff)
             file1.close()
         else: print("input.dat already exists at "+pwd+"/input.dat")
 
-recurse(yamldata_rev, len(yamldata_rev), root)
+recurse(yamldata, len(yamldata), root)
+
+
 
