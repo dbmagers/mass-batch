@@ -35,7 +35,7 @@ yamldata.reverse()
 parser = argparse.ArgumentParser(description= "Show yaml file locations")
 
 subparsers = parser.add_argument('-y', '--yaml', help = " location of yaml file that stores all directories to be created",
-                                action=)
+                                action=" ")
 
 
 #end of argparse part, don't know what the action should be but i assume all other
