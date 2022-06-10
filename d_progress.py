@@ -27,9 +27,9 @@ subparsers = parser.add_argument('-y', '--yaml', help = " location of yaml file 
                                 action=" ")
 subparsers = parser.add_argument('-m', '--mako', help = " location of mako template file",
                                 action=" ")
-subparsers = parser.add_argument('-p', '--pbs', help = " location of pbs submission file",
+#subparsers = parser.add_argument('-p', '--pbs', help = " location of pbs submission file",
                                 action=" ")
-subparsers = parser.add_argument('-d', '--debug', help = "write all files but do not submit files to be run",
+#subparsers = parser.add_argument('-d', '--debug', help = "write all files but do not submit files to be run",
                                 action=" ")                                                                                                
 #end of argparse part, don't know what the action should be but i assume all other
 #argparse command line functions will follow the format above this comment
