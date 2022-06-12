@@ -9,30 +9,29 @@ from mako.template import Template
 #use yaml to sort our folders
 #implement arg parse
 
+#new part added 6/1/2022 for argparser
+parser = argparse.ArgumentParser(description= "Submit all the jobs")
+
+subparsers = parser.add_argument('-y', '--yaml', help = "Location of yaml file that stores all directories to be created.\n(Default: data.yaml)", default='data.yaml')
+#subparsers = parser.add_argument('-m', '--mako', help = " location of mako template file")
+#subparsers = parser.add_argument('-p', '--pbs', help = " location of pbs submission file", action=" ")
+#subparsers = parser.add_argument('-d', '--debug', help = "write all files but do not submit files to be run", action=" ")
+
+options = vars(parser.parse_args())
+
+#end of argparse part, don't know what the action should be but i assume all other
+#argparse command line functions will follow the format above this comment
+
+# load needed files
 yaml_string = """
 - {'a':'e','b':'f'}
 - {'m':'r','n':'s'}
 """
-
-#stream = open('data.yaml','r')
-#yamldata = yaml.safe_load(stream)
-#stream.close()
-yamldata = yaml.safe_load(yaml_string)
+stream = open(options['yaml'],'r')
+yamldata = yaml.safe_load(stream)
+stream.close()
+#yamldata = yaml.safe_load(yaml_string)
 #print(yamldata)
-
-#new part added 6/1/2022 for argparser
-parser = argparse.ArgumentParser(description= "Show yaml file locations")
-
-subparsers = parser.add_argument('-y', '--yaml', help = " location of yaml file that stores all directories to be created",
-                                action=" ")
-subparsers = parser.add_argument('-m', '--mako', help = " location of mako template file",
-                                action=" ")
-#subparsers = parser.add_argument('-p', '--pbs', help = " location of pbs submission file",
-                                action=" ")
-#subparsers = parser.add_argument('-d', '--debug', help = "write all files but do not submit files to be run",
-                                action=" ")                                                                                                
-#end of argparse part, don't know what the action should be but i assume all other
-#argparse command line functions will follow the format above this comment
 
 root = 'Magers'
 yamldata_rev = list(reversed(yamldata))
