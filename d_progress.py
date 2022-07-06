@@ -2,6 +2,8 @@ import os
 import yaml
 import argparse
 from mako.template import Template
+import logging
+
 
 # 1. understand mako libray, find examples
 # put txt files with same format but different values in the bottom folder of Magers
@@ -9,7 +11,7 @@ from mako.template import Template
 #use yaml to sort our folders
 #implement arg parse
 
-#new part added 6/1/2022 for argparser
+# part added 6/1/2022 for yaml argparser
 parser = argparse.ArgumentParser(description= "Submit all the jobs")
 
 subparsers = parser.add_argument('-y', '--yaml', help = "Location of yaml file that stores all directories to be created.\n(Default: data.yaml)", default='data.yaml')
@@ -20,7 +22,19 @@ subparsers = parser.add_argument('-y', '--yaml', help = "Location of yaml file t
 options = vars(parser.parse_args())
 
 #end of argparse part, don't know what the action should be but i assume all other
-#argparse command line functions will follow the format above this comment
+
+##part added 6/29/2022 for mako argparser
+parser1 = argparse.ArgumentParser(description= "Submit all the jobs")
+subparsers = parser1.add_argument('-m', '--mako', help ="Location of mako template file names", default = '')
+                                                        #what exactly would be our default for the mako file as we haven't actually made a mako file yet i think
+
+##end of mako argarser
+
+##part added for logging files created
+logging.basicConfig(filename="log.txt", level = logging.INFO,format="%(asctime)s %(message)s")
+
+
+
 
 # load needed files
 yaml_string = """
@@ -46,7 +60,9 @@ def recurse(yamldata_rev, num_level, pwd):
             temp -= 1
             recurse(yamldata_rev, num_level - 1, pwd)
     else:
-        print(pwd)
+        #LOGGING DATA ADDITION; instead of printing directories on screen, log them into "log.txt" file
+        logging.info(pwd)
+        #print(pwd)
         # check if folder already exists, then make it
         if not os.path.exists(pwd): os.makedirs(pwd)
         # check if input.dat already exists, else make it
