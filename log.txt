@@ -1,0 +1,24 @@
+2022-07-06 16:56:12,893 Magers/a/m
+2022-07-06 16:56:12,903 Magers/a/n
+2022-07-06 16:56:12,907 Magers/b/m
+2022-07-06 16:56:12,914 Magers/b/n
+2022-09-26 19:36:06,023 Magers/a/m
+2022-09-26 19:36:06,024 Magers/a/n
+2022-09-26 19:36:06,026 Magers/b/m
+2022-09-26 19:36:06,028 Magers/b/n
+2022-09-26 19:37:03,289 Magers/a/m
+2022-09-26 19:37:03,289 input.dat already exists at Magers/a/m/input.dat
+2022-09-26 19:37:03,289 Magers/a/n
+2022-09-26 19:37:03,289 input.dat already exists at Magers/a/n/input.dat
+2022-09-26 19:37:03,290 Magers/b/m
+2022-09-26 19:37:03,290 input.dat already exists at Magers/b/m/input.dat
+2022-09-26 19:37:03,290 Magers/b/n
+2022-09-26 19:37:03,290 input.dat already exists at Magers/b/n/input.dat
+2022-09-26 19:37:24,125 Magers/a/m
+2022-09-26 19:37:24,126 input.dat already exists at Magers/a/m/input.dat
+2022-09-26 19:37:24,126 Magers/a/n
+2022-09-26 19:37:24,126 input.dat already exists at Magers/a/n/input.dat
+2022-09-26 19:37:24,127 Magers/b/m
+2022-09-26 19:37:24,127 input.dat already exists at Magers/b/m/input.dat
+2022-09-26 19:37:24,127 Magers/b/n
+2022-09-26 19:37:24,127 input.dat already exists at Magers/b/n/input.dat
