@@ -1,5 +1,22 @@
+#! input file created by mass-batch script
+
+memory 4 gb
+
+molecule mol {
 ${var1}
-${var2}        
+}
 
+set {
+basis ${var3}
+scf_type df
+freeze_core true
+dft_radial_points 99
+dft_spherical_points 590
+guess sad
+e_convergence 10
+d_convergence 10
+g_convergence gau_tight
+}
 
-# in main code
+optimize("${var2}")
+

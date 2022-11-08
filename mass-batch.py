@@ -6,7 +6,6 @@ from mako.template import Template
 import logging
 import subprocess
 
-
 # 1. understand mako libray, find examples
 # put txt files with same format but different values in the bottom folder of Magers
 
@@ -17,13 +16,9 @@ import subprocess
 parser = argparse.ArgumentParser(description= "Submit all the jobs")
 
 parser.add_argument('-y', '--yaml', help = "Location of yaml file that stores all directories to be created.\n(Default: data.yaml)", default='data.yaml')
-parser.add_argument('-m', '--mako', help = " location of mako template file", default='input.tmpl')
-
-# parser.add_argument('-p', '--pbs', help = " location of pbs submission file", action=" ")
+parser.add_argument('-m', '--mako', help = "Location of mako template input file.\n(Default: input.yaml)", default='input.tmpl')
+parser.add_argument('-p', '--pbs', help = "Location of pbs submission file", default='submit.sh')
 # parser.add_argument('-d', '--debug', help = "write all files but do not submit files to be run", action=" ")
-
-
-
 
 args = vars(parser.parse_args())
 
@@ -33,23 +28,17 @@ args = vars(parser.parse_args())
 logging.basicConfig(filename="log.txt", level = logging.INFO,format="%(asctime)s %(message)s")
 ## use of this logg import comes in LINE 66
 
-#code will be used in line 88
-
-
-
-
 # load needed files
-yaml_string = """
-- {'a':'e','b':'f'}
-- {'m':'r','n':'s'}
-"""
+#yaml_string = """
+#- {'a':'e','b':'f'}
+#- {'m':'r','n':'s'}
+#"""
+#yamldata = yaml.safe_load(yaml_string)
 stream = open(args['yaml'],'r')
 yamldata = yaml.safe_load(stream)
 stream.close()
-#yamldata = yaml.safe_load(yaml_string)
-#print(yamldata)
 
-root = 'Magers'
+root = 'calcs'
 yamldata_rev = list(reversed(yamldata))
 
 def recurse(yamldata_rev, num_level, pwd):
@@ -57,14 +46,14 @@ def recurse(yamldata_rev, num_level, pwd):
         temp = num_level
         for i in yamldata_rev[num_level-1]: # i is a dict
             if temp != num_level:
-                pwd = pwd[:-2]
+                pwd = pwd.split('/')[:-1]
+                pwd = '/'.join(pwd)
             pwd += "/"+i
             temp -= 1
             recurse(yamldata_rev, num_level - 1, pwd)
     else:
         #LOGGING DATA ADDITION; instead of printing directories on screen, log them into "log.txt" file
         logging.info(pwd)
-        #print(pwd)
         # check if folder already exists, then make it
         if not os.path.exists(pwd): 
             os.makedirs(pwd)
@@ -85,8 +74,6 @@ def recurse(yamldata_rev, num_level, pwd):
             file1 = open(pwd+"/input.dat", "w")
             file1.write(file_contents)
             file1.close()
-            
-            
             
         #"input data will go into log"
         else:
