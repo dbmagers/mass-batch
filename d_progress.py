@@ -1,8 +1,10 @@
 import os
+from re import sub
 import yaml
 import argparse
 from mako.template import Template
 import logging
+import subprocess
 
 
 # 1. understand mako libray, find examples
@@ -15,27 +17,23 @@ import logging
 parser = argparse.ArgumentParser(description= "Submit all the jobs")
 
 parser.add_argument('-y', '--yaml', help = "Location of yaml file that stores all directories to be created.\n(Default: data.yaml)", default='data.yaml')
-# parsers = parser.add_argument('-m', '--mako', help = " location of mako template file")
+parser.add_argument('-m', '--mako', help = " location of mako template file", default='input.tmpl')
+
 # parser.add_argument('-p', '--pbs', help = " location of pbs submission file", action=" ")
 # parser.add_argument('-d', '--debug', help = "write all files but do not submit files to be run", action=" ")
 
-options = vars(parser.parse_args())
-
-#end of argparse part, don't know what the action should be but i assume all other
-
-##part added 6/29/2022 for mako argparser
-parser1 = argparse.ArgumentParser(description= "Submit all the jobs")
-subparsers = parser1.add_argument('-m', '--mako', help ="Location of mako template file names", default = '')
-                                                        #what exactly would be our default for the mako file as we haven't actually made a mako file yet i think
 
 
-args = parser.parse_args()
+
+args = vars(parser.parse_args())
+
 ##end of mako argarser
 
 ##part added for logging files created 7/2/2022
 logging.basicConfig(filename="log.txt", level = logging.INFO,format="%(asctime)s %(message)s")
-
 ## use of this logg import comes in LINE 66
+
+#code will be used in line 88
 
 
 
@@ -45,7 +43,7 @@ yaml_string = """
 - {'a':'e','b':'f'}
 - {'m':'r','n':'s'}
 """
-stream = open(options['yaml'],'r')
+stream = open(args['yaml'],'r')
 yamldata = yaml.safe_load(stream)
 stream.close()
 #yamldata = yaml.safe_load(yaml_string)
@@ -68,10 +66,11 @@ def recurse(yamldata_rev, num_level, pwd):
         logging.info(pwd)
         #print(pwd)
         # check if folder already exists, then make it
-        if not os.path.exists(pwd): os.makedirs(pwd)
+        if not os.path.exists(pwd): 
+            os.makedirs(pwd)
         # check if input.dat already exists, else make it
-        if not os.path.exists(pwd+"/input.dat"):
-            mytemplate = Template(filename = args.mako)
+        if not os.path.exists(pwd +"/input.dat"):
+            mytemplate = Template(filename = args["mako"])
             # get names of parent folders in pwd and remove root folder name from array
             directories = pwd.split("/")[1:]
 
@@ -86,6 +85,9 @@ def recurse(yamldata_rev, num_level, pwd):
             file1 = open(pwd+"/input.dat", "w")
             file1.write(file_contents)
             file1.close()
+            
+            
+            
         #"input data will go into log"
         else:
             logging.info("input.dat already exists at "+pwd+"/input.dat") 
