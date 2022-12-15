@@ -28,18 +28,12 @@ args = vars(parser.parse_args())
 logging.basicConfig(filename="log.txt", level = logging.INFO,format="%(asctime)s %(message)s")
 ## use of this logg import comes in LINE 66
 
-# load needed files
-#yaml_string = """
-#- {'a':'e','b':'f'}
-#- {'m':'r','n':'s'}
-#"""
-#yamldata = yaml.safe_load(yaml_string)
+# load yaml data file
 stream = open(args['yaml'],'r')
 yamldata = yaml.safe_load(stream)
 stream.close()
-
-root = 'calcs'
 yamldata_rev = list(reversed(yamldata))
+root = 'calcs'
 
 def recurse(yamldata_rev, num_level, pwd):
     if num_level >= 1:
@@ -68,7 +62,7 @@ def recurse(yamldata_rev, num_level, pwd):
             replace_dict = {}
             for j in range(0,num_directories):
                 replace_dict['var'+str(j+1)] = yamldata[j][directories[j]]
-            file_contents = mytemplate.render(**replace_dict)
+            file_contents = mytemplate.render(**replace_dict).replace('\r','')
 
             # make file in bottom directory               
             file1 = open(pwd+"/input.dat", "w")

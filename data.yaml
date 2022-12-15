@@ -1,4 +1,17 @@
 ---
-- {'h2o':'h2o z-matrix','nh3':'nh3 z-matrix'}
+- {'h2o': "
+ H \n
+ O 1 r1 \n
+ H 2 r1 1 a1 \n\n
+ r1 = 1.0 \n
+ a1 = 104.5",
+'nh3': "
+ N \n
+ H  1  r1 \n
+ H  1  r1  2  a1 \n
+ H  1  r1  2  a1  3  d1 \n\n
+ r1 = 1.0 \n
+ a1 = 110.0 \n
+ d1 = 120.0"}
 - {'b3lyp':'b3lyp','wB97':'wB97'}
 - {'sto-3g':'sto-3g','6-31g':'6-31g'}
