@@ -1,4 +1,5 @@
 import os
+from time import sleep
 from re import sub
 import yaml
 import argparse
@@ -25,6 +26,7 @@ yamldata_rev = list(reversed(yamldata))
 
 # set root folder for created file tree
 root = 'calcs'
+cwd = os.getcwd()
 
 # recursive function to walk folder tree and create each file from template
 def recurse(yamldata_rev, num_level, pwd):
@@ -62,6 +64,11 @@ def recurse(yamldata_rev, num_level, pwd):
             file1 = open(pwd+"/input.dat", "w")
             file1.write(file_contents)
             file1.close()
+            # change to bottom child directory in order to run submit script then change back
+            os.chdir(pwd)
+            os.system("sjob -p psi4 -n 1")
+            sleep(1)
+            os.chdir(cwd)
             
         #"input data will go into log"
         else:
