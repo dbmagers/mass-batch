@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(description= "Submit all the jobs")
 parser.add_argument('-y', '--yaml', help = "Location of yaml file that stores all directories to be created.\n(Default: data.yaml)", default='data.yaml')
 parser.add_argument('-m', '--mako', help = "Location of mako template input file.\n(Default: input.yaml)", default='input.tmpl')
 parser.add_argument('-p', '--pbs', help = "Location of pbs submission file", default='submit.sh')
-# parser.add_argument('-d', '--debug', help = "Write all files but do not submit files to be run", action=" ")
+parser.add_argument('-d', '--debug', help = "Write all files but do not submit files to be run", action='store_true')
 args = vars(parser.parse_args())
 
 # logging file config
@@ -65,10 +65,11 @@ def recurse(yamldata_rev, num_level, pwd):
             file1.write(file_contents)
             file1.close()
             # change to bottom child directory in order to run submit script then change back
-            os.chdir(pwd)
-            os.system("sjob -p psi4 -n 1")
-            sleep(1)
-            os.chdir(cwd)
+            if args['debug'] == False:
+                os.chdir(pwd)
+                os.system("sjob -p psi4 -n 1")
+                os.chdir(cwd)
+                sleep(1)
             
         #"input data will go into log"
         else:
