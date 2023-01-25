@@ -27,6 +27,7 @@ yamldata_rev = list(reversed(yamldata))
 # set root folder for created file tree
 root = 'calcs'
 cwd = os.getcwd()
+logging.info("mass-batch script began at "+cwd)
 
 # recursive function to walk folder tree and create each file from template
 def recurse(yamldata_rev, num_level, pwd):
@@ -69,6 +70,7 @@ def recurse(yamldata_rev, num_level, pwd):
                 os.chdir(pwd)
                 os.system("sjob -p psi4 -n 1")
                 os.chdir(cwd)
+                logging.info("job submitted at "+pwd)
                 sleep(1)
             
         #"input data will go into log"
