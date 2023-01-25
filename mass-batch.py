@@ -6,36 +6,29 @@ from mako.template import Template
 import logging
 import subprocess
 
-# 1. understand mako libray, find examples
-# put txt files with same format but different values in the bottom folder of Magers
-
-#use yaml to sort our folders
-#implement arg parse
-
-# part added 6/1/2022 for yaml argparser
+# argparser
 parser = argparse.ArgumentParser(description= "Submit all the jobs")
-
 parser.add_argument('-y', '--yaml', help = "Location of yaml file that stores all directories to be created.\n(Default: data.yaml)", default='data.yaml')
 parser.add_argument('-m', '--mako', help = "Location of mako template input file.\n(Default: input.yaml)", default='input.tmpl')
 parser.add_argument('-p', '--pbs', help = "Location of pbs submission file", default='submit.sh')
-# parser.add_argument('-d', '--debug', help = "write all files but do not submit files to be run", action=" ")
-
+# parser.add_argument('-d', '--debug', help = "Write all files but do not submit files to be run", action=" ")
 args = vars(parser.parse_args())
 
-##end of mako argarser
-
-##part added for logging files created 7/2/2022
+# logging file config
 logging.basicConfig(filename="log.txt", level = logging.INFO,format="%(asctime)s %(message)s")
-## use of this logg import comes in LINE 66
 
 # load yaml data file
 stream = open(args['yaml'],'r')
 yamldata = yaml.safe_load(stream)
 stream.close()
 yamldata_rev = list(reversed(yamldata))
+
+# set root folder for created file tree
 root = 'calcs'
 
+# recursive function to walk folder tree and create each file from template
 def recurse(yamldata_rev, num_level, pwd):
+    # create child pwd folder by walkinng through yamldata data
     if num_level >= 1:
         temp = num_level
         for i in yamldata_rev[num_level-1]: # i is a dict
@@ -45,6 +38,7 @@ def recurse(yamldata_rev, num_level, pwd):
             pwd += "/"+i
             temp -= 1
             recurse(yamldata_rev, num_level - 1, pwd)
+    # if at bottom child folder, make input file from template and submit to queue
     else:
         #LOGGING DATA ADDITION; instead of printing directories on screen, log them into "log.txt" file
         logging.info(pwd)
