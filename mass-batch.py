@@ -12,6 +12,8 @@ parser = argparse.ArgumentParser(description= "Submit all the jobs")
 parser.add_argument('-y', '--yaml', help = "Location of yaml file that stores all directories to be created.\n(Default: data.yaml)", default='data.yaml')
 parser.add_argument('-m', '--mako', help = "Location of mako template input file.\n(Default: input.yaml)", default='input.tmpl')
 parser.add_argument('-p', '--pbs', help = "Location of pbs submission file", default='submit.sh')
+parser.add_argument('-i', '--input', help = "Name of input file to create in each bottom directory.\n(Default: input.dat)", default='input.dat')
+parser.add_argument('-t', '--time', help = "Time between subsequent submissions.\n(Default: 1 second)", default=1, type=float)
 parser.add_argument('-d', '--debug', help = "Write all files but do not submit files to be run", action='store_true')
 args = vars(parser.parse_args())
 
@@ -49,7 +51,7 @@ def recurse(yamldata_rev, num_level, pwd):
         if not os.path.exists(pwd): 
             os.makedirs(pwd)
         # check if input.dat already exists, else make it
-        if not os.path.exists(pwd +"/input.dat"):
+        if not os.path.exists(pwd +"/"+args["input"]):
             mytemplate = Template(filename = args["mako"])
             # get names of parent folders in pwd and remove root folder name from array
             directories = pwd.split("/")[1:]
@@ -62,20 +64,25 @@ def recurse(yamldata_rev, num_level, pwd):
             file_contents = mytemplate.render(**replace_dict).replace('\r','')
 
             # make file in bottom directory               
-            file1 = open(pwd+"/input.dat", "w")
+            file1 = open(pwd+"/"+args["input"], "w")
             file1.write(file_contents)
             file1.close()
             # change to bottom child directory in order to run submit script then change back
             if args['debug'] == False:
                 os.chdir(pwd)
-                os.system("sjob -p psi4 -n 1")
+                os.system("qsub "+cwd+'/'+args["pbs"])
                 os.chdir(cwd)
                 logging.info("job submitted at "+pwd)
-                sleep(1)
+                sleep(args["time"])
             
         #"input data will go into log"
         else:
             logging.info("input.dat already exists at "+pwd+"/input.dat") 
             #print("input.dat already exists at "+pwd+"/input.dat")
 
-recurse(yamldata_rev, len(yamldata_rev), root)
+def main():
+    recurse(yamldata_rev, len(yamldata_rev), root)
+
+if __name__ == "__main__":
+    main()
+
